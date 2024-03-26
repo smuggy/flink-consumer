@@ -1,0 +1,35 @@
+---
+management:
+  endpoint:
+    shutdown:
+      enabled: true
+    health:
+      enabled: true
+    metrics:
+      enabled: true
+    info:
+      enabled: true
+  observations:
+    annotations:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+#    enabled-by-default: false
+---
+spring:
+  jmx:
+    enabled: true
+  config:
+    activate:
+      on-profile: default,dev
+  cloud:
+    bus:
+      enabled: false
+    discovery:
+      enabled: false
+    consul:
+      enabled: false
+      config:
+        enabled: false
