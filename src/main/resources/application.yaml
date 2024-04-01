@@ -16,9 +16,19 @@ management:
     web:
       exposure:
         include: "*"
-#    enabled-by-default: false
+---
+thread:
+  size: 10
+myapp:
+  kafka:
+    topicName: test-topic-one
+    groupId: test-group-id
+    #    bootstrapAddress: kafka-00:9092,kafka-01:9092,kafka-02:9092
+    bootstrapAddress: 127.0.0.1:9092
 ---
 spring:
+  application:
+    name: flink-consumer
   jmx:
     enabled: true
   config:
@@ -33,3 +43,4 @@ spring:
       enabled: false
       config:
         enabled: false
+...
