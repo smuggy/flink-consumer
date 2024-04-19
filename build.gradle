@@ -1,46 +1,66 @@
 plugins {
     id 'java'
-    id 'application'
-    id 'org.springframework.boot' version '3.2.3'
+//    id 'application'
+    id 'org.springframework.boot' version '2.1.18.RELEASE'
 }
 
 group = 'net.podspace'
-version = '0.1.1'
+version = '0.1.3'
 
 repositories {
     mavenCentral()
 }
 
-application {
-    mainClass = "net.podspace.flink.Main"
+//application {
+//    mainClass = "net.podspace.flink.Main"
+//}
+
+//tasks.register("copyTarToDockerDir", Copy) {
+//    from layout.buildDirectory.dir("distributions")
+//    include "**/*.tar"
+//    into layout.buildDirectory.dir("docker")
+//}
+//
+//tasks.register("prepareDockerDir", Copy) {
+//    from layout.projectDirectory.dir("src/main/docker")
+//    include "**/*"
+//    filter { it.replaceAll('__app_version__', project.version) }
+//    into layout.buildDirectory.dir("docker")
+//}
+//
+//tasks.register("buildDockerImage", Exec) {
+//    workingDir layout.getBuildDirectory()
+//    commandLine "docker", "build", "--build-arg", "APP_VERSION=${project.version}", "--tag", "${project.name}:${project.version}", "docker"
+//}
+//
+//tasks.register("pushDockerImage", Exec) {
+//    commandLine "docker", "push", "${project.name}:${project.version}"
+//}
+
+//java {
+//    toolchain {
+//        languageVersion = JavaLanguageVersion.of(11)
+//    }
+//}
+
+tasks.compileJava {
+    options.release.set(11)
 }
 
-tasks.register("copyTarToDockerDir", Copy) {
-    from layout.buildDirectory.dir("distributions")
-    include "**/*.tar"
-    into layout.buildDirectory.dir("docker")
+tasks.register('customFatJar', Jar) {
+    manifest {
+        attributes 'Main-Class': 'net.podspace.flink.processor.Main'
+    }
+    archiveBaseName = 'flink-processor-fat'
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
 }
 
-tasks.register("prepareDockerDir", Copy) {
-    from layout.projectDirectory.dir("src/main/docker")
-    include "**/*"
-    filter { it.replaceAll('__app_version__', project.version) }
-    into layout.buildDirectory.dir("docker")
-}
-
-tasks.register("buildDockerImage", Exec) {
-    workingDir layout.getBuildDirectory()
-    commandLine "docker", "build", "--build-arg", "APP_VERSION=${project.version}", "--tag", "${project.name}:${project.version}", "docker"
-}
-
-tasks.register("pushDockerImage", Exec) {
-    commandLine "docker", "push", "${project.name}:${project.version}"
-}
-
-copyTarToDockerDir.dependsOn build
-buildDockerImage.dependsOn prepareDockerDir
-buildDockerImage.dependsOn copyTarToDockerDir
-pushDockerImage.dependsOn buildDockerImage
+//copyTarToDockerDir.dependsOn build
+//buildDockerImage.dependsOn prepareDockerDir
+//buildDockerImage.dependsOn copyTarToDockerDir
+//pushDockerImage.dependsOn buildDockerImage
 
 dependencies {
     implementation 'javax.annotation:javax.annotation-api:1.3.2'
@@ -48,18 +68,21 @@ dependencies {
     implementation 'org.apache.logging.log4j:log4j-core:2.22.0'
     implementation 'org.apache.logging.log4j:log4j-layout-template-json:2.22.0'
 
-    implementation 'org.springframework.boot:spring-boot-starter-web:3.2.3'
-    implementation 'org.springframework.boot:spring-boot-starter-log4j2:3.2.3'
-    implementation 'org.springframework.boot:spring-boot-starter-actuator:3.2.3'
-    implementation 'org.springframework.cloud:spring-cloud-starter-consul-all:4.1.0'
+//    implementation 'org.springframework:spring-context:5.3.34'
+
+    implementation 'org.springframework.boot:spring-boot-starter-web:2.1.18.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter-log4j2:2.1.18.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator:2.1.18.RELEASE'
+//    implementation 'org.springframework.cloud:spring-cloud-starter-consul-all:4.1.0'
 
     implementation 'org.apache.flink:flink-streaming-java:1.19.0'
     implementation 'org.apache.flink:flink-java:1.19.0'
     implementation 'org.apache.flink:flink-core:1.19.0'
     implementation 'org.apache.flink:flink-connector-kafka:3.1.0-1.18'
+    implementation 'org.apache.flink:flink-connector-base:1.18.1'
 //    implementation 'org.apache.flink:flink-clients:1.19.0'
 
-    implementation 'org.springframework.kafka:spring-kafka:3.1.1'
+//    implementation 'org.springframework.kafka:spring-kafka:3.1.1'
     implementation 'org.apache.kafka:kafka-clients:3.7.0'
 
     implementation 'io.micrometer:micrometer-registry-prometheus:1.12.4'

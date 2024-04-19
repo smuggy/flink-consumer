@@ -1,0 +1,4 @@
+myapp:
+  val: myvalue
+  thread:
+    size: 10

@@ -1,30 +1,32 @@
----
-management:
-  endpoint:
-    shutdown:
-      enabled: true
-    health:
-      enabled: true
-    metrics:
-      enabled: true
-    info:
-      enabled: true
-  observations:
-    annotations:
-      enabled: true
-  endpoints:
-    web:
-      exposure:
-        include: "*"
----
-thread:
-  size: 10
+#management:
+#  endpoint:
+#    shutdown:
+#      enabled: true
+#    health:
+#      enabled: true
+#    metrics:
+#      enabled: true
+#    info:
+#      enabled: true
+#  observations:
+#    annotations:
+#      enabled: true
+#  endpoints:
+#    web:
+#      exposure:
+#        include: "*"
+#thread:
+#  size: 10
 myapp:
+  val: myvalue
+  thread:
+    size: 15
   kafka:
     topicName: test-topic-one
     groupId: test-group-id
     #    bootstrapAddress: kafka-00:9092,kafka-01:9092,kafka-02:9092
-    bootstrapAddress: 127.0.0.1:9092
+    bootstrapAddress: 192.168.0.60:9092
+#    bootstrapAddress: 127.0.0.1:9092
 ---
 spring:
   application:

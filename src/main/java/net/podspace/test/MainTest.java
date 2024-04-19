@@ -26,7 +26,7 @@ public class MainTest {
 //        cts.stop();
         var m = cts.getTasks();
         for (var a: m.values()) {
-            logger.info("cancelling is: " + a.cancel(true));
+            logger.info("cancelling is: {}", a.cancel(true));
         }
         cts.shutdown();
     }
